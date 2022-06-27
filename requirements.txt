@@ -1,0 +1,5 @@
+numpy==1.21
+imageio
+stardist
+cellpose
+tqdm

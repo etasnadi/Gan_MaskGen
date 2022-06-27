@@ -1,0 +1,33 @@
+diff --git a/data/base_dataset.py b/data/base_dataset.py
+index 342b3f1..2e29684 100644
+--- a/data/base_dataset.py
++++ b/data/base_dataset.py
+@@ -79,12 +79,17 @@ def get_params(opt, size):
+ 
+ 
+ def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, convert=True):
++    # Hotfix: torchvision transforms need InterpolationMode enum instead of int (Image.BICUBIC=3 for example)
++    # to define interpolation for Resize or other transforms.
++    import torchvision
++    method_tv = torchvision.transforms.functional.InterpolationMode.BICUBIC
++    
+     transform_list = []
+     if grayscale:
+         transform_list.append(transforms.Grayscale(1))
+     if 'resize' in opt.preprocess:
+         osize = [opt.load_size, opt.load_size]
+-        transform_list.append(transforms.Resize(osize, method))
++        transform_list.append(transforms.Resize(osize, method_tv))
+     elif 'scale_width' in opt.preprocess:
+         transform_list.append(transforms.Lambda(lambda img: __scale_width(img, opt.load_size, opt.crop_size, method)))
+ 
+diff --git a/train.py b/train.py
+index 2852652..59df764 100644
+--- a/train.py
++++ b/train.py
+@@ -75,3 +75,4 @@ if __name__ == '__main__':
+             model.save_networks(epoch)
+ 
+         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
++    model.save_networks('latest')
+\ No newline at end of file
