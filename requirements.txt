@@ -1,5 +1,5 @@
 numpy==1.21
 imageio
 stardist
-cellpose
+cellpose==0.6.5
 tqdm
