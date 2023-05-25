@@ -10,6 +10,7 @@ python3 scripts/tiling_crop_ds.py
 -dm $WD/crops/masks```
 
 Generating synthetic masks (StyleGAN):
+--------------------------------------
 
 1. Compute the Cellpose representation of the masks: `python3 scripts/conv_masks2cp.py -i $WD/crops/masks -o $WD/crops/masks_cp`.
 1. Install StyleGAN from the repository: https://github.com/NVlabs/stylegan2-ada-pytorch.git.
@@ -28,6 +29,7 @@ Generating synthetic masks (StyleGAN):
 -rep cp```
 
 Generating microscopy iamges for the synthetic masks: (pix2pix):
+----------------------------------------------------------------
 
 1. Install pix2pix
     1. git clone https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix.git 
@@ -49,8 +51,9 @@ python3 scripts/create_pix2pix_ds.py
 -fakes $WD/synthetic_masks/<StyleGAN-train-id>/<StyleGAN-model>```
 
 Train StarDist/Cellpose models
+------------------------------
 
-Use the `stardist_traineval.py` os `cellpose_traineval.py` to train the models.
+Use the `stardist_traineval.py` or `cellpose_traineval.py` to train the models.
 
 ```
 python3 stardist_traineval.py \
