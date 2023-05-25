@@ -28,6 +28,7 @@ Generating synthetic masks (StyleGAN):
 -rep cp```
 
 Generating microscopy iamges for the synthetic masks: (pix2pix):
+
 1. Install pix2pix
     1. git clone https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix.git 
     2. Install in editable mode `python3 -m pip install -e pytorch-CycleGAN-and-pix2pix`. 
@@ -46,3 +47,25 @@ python3 scripts/create_pix2pix_ds.py
 -p2p $WD/pix2pix_results/model_0/test_latest/images
 --out $WD/synthetic_samples
 -fakes $WD/synthetic_masks/<StyleGAN-train-id>/<StyleGAN-model>```
+
+Train StarDist/Cellpose models
+
+Use the `stardist_traineval.py` os `cellpose_traineval.py` to train the models.
+
+```
+python3 stardist_traineval.py \
+	--wandb \
+	--wandb_user $WANDB_USER \
+	--wandb_project $WANDB_PROJECT \
+	--aug_pipe fige \
+	--n_epochs $N_EPOCHS \
+	-ds $WD/$DATASET_ROOT/$F/$SUBSET  \
+	--train_set $TRAIN_SET \
+	--work_dir $WORK_DIR  \
+	--model_group $MODEL_GROUP  \
+	--model_name $MODEL_NAME  \
+	--metrics_set test \
+	--n_val_patches 32
+```
+
+The dataset should be passed with the `-ds` parameter. The directory should contain the subfolders for each set e.g.: `train`, `val`, `test`. In each subset there are the `images` and `masks` subfolders. The default train subset is the `train` and the default validation subset is `val`. The `metrics_set` parameter defines the subset the model will be tested on.
